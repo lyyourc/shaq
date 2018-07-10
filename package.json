@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "parcel src/*.html --no-cache",
+    "dev": "parcel src/*.html src/content/*.js src/background/*.js --no-cache",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
