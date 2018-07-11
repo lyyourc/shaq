@@ -1,19 +1,27 @@
 import React from 'react'
-import styled from 'styled-components'
-import Suggestions from './Suggestions'
+import styled, { ThemeProvider } from 'styled-components'
+import AutoComplete from './AutoComplete'
 import starWarsNames from 'starwars-names'
+import theme from '../styles/theme'
 
 const StyledContainer = styled.div`
   position: fixed;
-  top: 20%;
+  top: 16%;
   left: 50%;
-  width: 200px;
+  transform: translate(-50%);
+  color: ${props => props.theme.color.text.primary};
+
+  & *:not(img) {
+    box-sizing: border-box;
+  }
 `
 
-export default function({ className }) {
+export default function() {
   return (
-    <StyledContainer>
-      <Suggestions items={starWarsNames.all} />
-    </StyledContainer>
+    <ThemeProvider theme={theme}>
+      <StyledContainer>
+        <AutoComplete items={starWarsNames.all} />
+      </StyledContainer>
+    </ThemeProvider>
   )
 }

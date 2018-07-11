@@ -1,7 +1,50 @@
 import React from 'react'
+import styled from 'styled-components'
+
+const InputWrapper = styled.div`
+  height: 48px;
+  width: 500px;
+  transition: box-shadow 0.2s;
+  padding: 0 13px;
+  display: flex;
+  align-items: center;
+
+  box-shadow: 0 20px 40px 4px ${props => props.theme.color.shadow.primary},
+    0 0 0 1px ${props => props.theme.color.shadow.secondary};
+
+  &:hover {
+    box-shadow: 0 24px 44px 4px ${props => props.theme.color.shadow.primary},
+      0 0 0 1px ${props => props.theme.color.shadow.secondary};
+  }
+
+  &::placeholder {
+    color: ${props => props.theme.color.text.placeholder};
+  }
+`
+
+const StyleInput = styled.input`
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  margin-left: 8px;
+  padding: 0;
+  font-size: 1.2em;
+  outline: none;
+  border: none;
+`
 
 export default class SearchInput extends React.Component {
   render() {
-    return <input {...this.props} />
+    return (
+      <InputWrapper>
+        <span>🔍</span>
+        <StyleInput
+          {...this.props}
+          autoFocus
+          type="search"
+          placeholder="What can I do for you 🎏"
+        />
+      </InputWrapper>
+    )
   }
 }
