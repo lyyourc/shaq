@@ -33,18 +33,23 @@ const StyleInput = styled.input`
   border: none;
 `
 
-export default class SearchInput extends React.Component {
+class SearchInput extends React.Component {
   render() {
     return (
       <InputWrapper>
         <span>🔍</span>
         <StyleInput
-          {...this.props}
           autoFocus
           type="search"
           placeholder="What can I do for you 🎏"
+          innerRef={this.props.inputRef}
+          {...this.props}
         />
       </InputWrapper>
     )
   }
 }
+
+export default React.forwardRef((props, ref) => (
+  <SearchInput {...props} inputRef={ref} />
+))

@@ -7,7 +7,6 @@ import SearchInput from './SearchInput'
 const StyledSuggestions = styled.div`
   position: relative; /* fake border-top */
   top: 0px;
-  background: #fff;
   max-height: 300px;
   box-shadow: 0 20px 40px 4px ${props => props.theme.color.shadow.primary},
     0 0 0 1px ${props => props.theme.color.shadow.secondary};
@@ -30,6 +29,12 @@ const StyledSuggestionItem = styled.div`
 `
 
 export default class Suggestions extends React.Component {
+  inputRef = React.createRef()
+
+  componentDidMount() {
+    this.inputRef.current.focus()
+  }
+
   render() {
     return (
       <Downshift
@@ -44,7 +49,7 @@ export default class Suggestions extends React.Component {
           selectedItem,
         }) => (
           <div>
-            <SearchInput {...getInputProps()} />
+            <SearchInput {...getInputProps({ ref: this.inputRef })} />
 
             {isOpen ? (
               <StyledSuggestions>

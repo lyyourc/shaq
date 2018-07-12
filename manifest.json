@@ -20,5 +20,15 @@
       ],
       "js": ["dist/content/index.js"]
     }
-  ]
+  ],
+
+  "commands": {
+    "toggle-app": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+U",
+        "mac": "Command+Shift+U"
+      },
+      "description": "Toggle app"
+    }
+  }
 }
