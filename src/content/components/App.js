@@ -1,8 +1,8 @@
 import React from 'react'
 import styled, { ThemeProvider } from 'styled-components'
 import ClickOutside from 'react-onclickout'
+import shortcuts from '../../data/shortcuts'
 import AutoComplete from './AutoComplete'
-import starWarsNames from 'starwars-names'
 import theme from '../styles/theme'
 
 const StyledContainer = styled.div`
@@ -13,16 +13,17 @@ const StyledContainer = styled.div`
   transform: translate(-50%);
   background: #fff;
   color: ${props => props.theme.color.text.primary};
-  display: ${props => props.hidden ? 'none' : 'block'};
+  display: ${props => (props.hidden ? 'none' : 'block')};
 
   & *:not(img) {
     box-sizing: border-box;
   }
 `
+const items = [...shortcuts]
 
 export default class App extends React.Component {
   state = {
-    isHidden: true,
+    isHidden: false,
   }
 
   componentDidMount() {
@@ -36,7 +37,7 @@ export default class App extends React.Component {
       <ThemeProvider theme={theme}>
         <ClickOutside onClickOut={() => this.handleClickOutside()}>
           <StyledContainer hidden={this.state.isHidden}>
-            <AutoComplete items={starWarsNames.all} />
+            <AutoComplete items={items} />
           </StyledContainer>
         </ClickOutside>
       </ThemeProvider>
@@ -52,7 +53,10 @@ export default class App extends React.Component {
   }
 
   toggleApp() {
-    this.setState(prevState => ({ ...prevState, isHidden: !prevState.isHidden}))
+    this.setState(prevState => ({
+      ...prevState,
+      isHidden: !prevState.isHidden,
+    }))
   }
 
   handleClickOutside() {
