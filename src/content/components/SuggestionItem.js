@@ -24,9 +24,4 @@ export default class SuggestionItem extends React.Component {
       </Clipboard>
     )
   }
-
-  handleNameClick(event) {
-    event.preventDefault()
-    console.log(event)
-  }
 }

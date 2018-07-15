@@ -1,7 +1,6 @@
 import React from 'react'
 import styled, { ThemeProvider } from 'styled-components'
 import ClickOutside from 'react-onclickout'
-import shortcuts from '../../data/shortcuts'
 import AutoComplete from './AutoComplete'
 import theme from '../styles/theme'
 
@@ -19,7 +18,6 @@ const StyledContainer = styled.div`
     box-sizing: border-box;
   }
 `
-const items = [...shortcuts]
 
 export default class App extends React.Component {
   state = {
@@ -35,9 +33,9 @@ export default class App extends React.Component {
   render() {
     return (
       <ThemeProvider theme={theme}>
-        <ClickOutside onClickOut={() => this.handleClickOutside()}>
+        <ClickOutside onClickOut={this.handleClickOutside}>
           <StyledContainer hidden={this.state.isHidden}>
-            <AutoComplete items={items} />
+            <AutoComplete />
           </StyledContainer>
         </ClickOutside>
       </ThemeProvider>
@@ -52,14 +50,14 @@ export default class App extends React.Component {
     })
   }
 
-  toggleApp() {
+  toggleApp = () => {
     this.setState(prevState => ({
       ...prevState,
       isHidden: !prevState.isHidden,
     }))
   }
 
-  handleClickOutside() {
+  handleClickOutside = () => {
     this.setState(prevState => ({ ...prevState, isHidden: true }))
   }
 }
