@@ -2,6 +2,10 @@
 
 A browser command palette
 
+## Feature
+
+* Browser shortcut tips
+* Quick cookie query and copy
 
 ## Tutorial
 
