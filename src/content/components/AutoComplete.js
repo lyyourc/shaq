@@ -5,7 +5,10 @@ import styled from 'styled-components'
 import { HotKeys } from 'react-hotkeys'
 import SearchInput from './SearchInput'
 import SuggestionItem from './SuggestionItem'
+import StyledCategoryName from './styled/StyledCategoryName'
 import shortcuts from '../../data/shortcuts'
+import cookies from '../../data/cookies'
+import { normalizeData, flattenData } from '../utils/index'
 
 const StyledSuggestions = styled.div`
   position: relative; /* fake border-top */
@@ -34,9 +37,11 @@ const StyledSuggestionItem = styled.div`
   }
 `
 
-const items = [...shortcuts]
+const items = normalizeData({ shortcuts, cookies })
 
 export default class Suggestions extends React.Component {
+  allItems = items
+
   keyMap = {
     nextSuggetion: ['ctrl+n', 'down'],
     prevSuggestion: ['ctrl+p', 'up'],
@@ -67,7 +72,8 @@ export default class Suggestions extends React.Component {
       <HotKeys keyMap={this.keyMap} handlers={handlers}>
         <Downshift
           isOpen={this.state.isOpen}
-          // inputValue={'s'}
+          // isOpen={true}
+          // inputValue={'U'}
           highlightedIndex={this.state.highlightedIndex}
           itemToString={item => (item ? item.name : '')}
           onInputValueChange={this.handleInputValueChange}
@@ -85,17 +91,40 @@ export default class Suggestions extends React.Component {
 
               {isOpen ? (
                 <StyledSuggestions>
-                  {this.state.items.map((item, index) => (
-                    <StyledSuggestionItem
-                      {...getItemProps({
-                        key: item.name,
-                        index,
-                        item,
-                        highlight: highlightedIndex === index,
-                      })}>
-                      <SuggestionItem {...item} />
-                    </StyledSuggestionItem>
-                  ))}
+                  {
+                    this.state.items.reduce(
+                      (acc, item) => {
+                        const section = (
+                          <div key={item.category}>
+                            <StyledCategoryName>
+                              {item.category}
+                            </StyledCategoryName>
+
+                            {item.items.map(subItem => {
+                              const index = acc.itemIndex++
+
+                              return (
+                                <StyledSuggestionItem
+                                  {...getItemProps({
+                                    key: subItem.name,
+                                    index,
+                                    item,
+                                    highlight: highlightedIndex === index,
+                                  })}>
+                                  <SuggestionItem {...subItem} />
+                                </StyledSuggestionItem>
+                              )
+                            })}
+                          </div>
+                        )
+
+                        acc.sections.push(section)
+
+                        return acc
+                      },
+                      { sections: [], itemIndex: 0 }
+                    ).sections
+                  }
                 </StyledSuggestions>
               ) : null}
             </div>
@@ -111,7 +140,8 @@ export default class Suggestions extends React.Component {
     if (!this.state.isOpen) return
 
     this.setState(prevState => {
-      const itemsCount = prevState.items.length - 1
+      const itemsCount = flattenData(prevState.items).length - 1
+      console.log('ggg', itemsCount)
       const newHighlightedIndex = prevState.highlightedIndex + step
 
       const highlightedIndex =
@@ -136,7 +166,7 @@ export default class Suggestions extends React.Component {
     }
   }
 
-  toggleMenu = (isOpen) => {
+  toggleMenu = isOpen => {
     this.setState(prevState => ({
       ...prevState,
       isOpen,
@@ -154,6 +184,18 @@ export default class Suggestions extends React.Component {
   }
 
   fitlerItems = inputValue => {
-    return fuzzaldrin.filter(items, inputValue, { key: 'name' })
+    const items = this.allItems.reduce((prev, group) => {
+      const matchItems = group.items.filter(item =>
+        fuzzaldrin.filter(item.name, inputValue)
+      )
+
+      if (matchItems.length > 0) {
+        return [...prev, { ...group, items: matchItems }]
+      }
+
+      return prev
+    }, [])
+
+    return items
   }
 }

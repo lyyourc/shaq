@@ -1,11 +1,12 @@
 # sha-qiang
 
-A browser command palette
+[WIP] A browser command palette
 
 ## Feature
 
 * Browser shortcut tips
-* Quick cookie query and copy
+* Quick query: Cookie, localStorage...
+* ...
 
 ## Tutorial
 
